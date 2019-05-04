@@ -1,4 +1,4 @@
-int versionNumber = 219;
+int versionNumber = 1;
 int dataVersionNumber = 0;
 
 int binVersionNumber = versionNumber;
@@ -171,7 +171,7 @@ double viewHeight = 720;
 // if our screen is wider than this (wider than 16:9 aspect ratio)
 // then we will put letterbox bars on the sides
 // Usually, if screen is not 16:9, it will be taller, not wider,
-// and we will put letterbox bars on the top and bottom 
+// and we will put letterbox bars on the top and bottom
 double visibleViewWidth = viewWidth;
 
 
@@ -328,13 +328,13 @@ static int stepsBetweenDeleteRepeat;
 
 static void updateDataVersionNumber() {
     File file( NULL, "dataVersionNumber.txt" );
-    
+
     if( file.exists() ) {
         char *contents = file.readFileContents();
-        
+
         if( contents != NULL ) {
             sscanf( contents, "%d", &dataVersionNumber );
-        
+
             delete [] contents;
 
             if( dataVersionNumber > versionNumber ) {
@@ -350,36 +350,36 @@ static void updateDataVersionNumber() {
 #define SETTINGS_HASH_SALT "another_loss"
 
 
-static const char *customDataFormatWriteString = 
+static const char *customDataFormatWriteString =
     "version%d_mouseSpeed%f_musicOff%d_musicLoudness%f"
     "_webRetrySeconds%d";
 
-static const char *customDataFormatReadString = 
+static const char *customDataFormatReadString =
     "version%d_mouseSpeed%f_musicOff%d_musicLoudness%f"
     "_webRetrySeconds%d";
 
 
-char *getCustomRecordedGameData() {    
-    
+char *getCustomRecordedGameData() {
+
     updateDataVersionNumber();
 
-    float mouseSpeedSetting = 
+    float mouseSpeedSetting =
         SettingsManager::getFloatSetting( "mouseSpeed", 1.0f );
-    int musicOffSetting = 
+    int musicOffSetting =
         SettingsManager::getIntSetting( "musicOff", 0 );
-    float musicLoudnessSetting = 
+    float musicLoudnessSetting =
         SettingsManager::getFloatSetting( "musicLoudness", 1.0f );
-    
-    int webRetrySecondsSetting = 
+
+    int webRetrySecondsSetting =
         SettingsManager::getIntSetting( "webRetrySeconds", 10 );
-    
+
 
     char * result = autoSprintf(
         customDataFormatWriteString,
-        versionNumber, mouseSpeedSetting, musicOffSetting, 
+        versionNumber, mouseSpeedSetting, musicOffSetting,
         musicLoudnessSetting,
         webRetrySecondsSetting );
-    
+
 
     return result;
     }
@@ -408,20 +408,20 @@ void initDrawString( int inWidth, int inHeight ) {
     toggleMipMapGeneration( true );
     toggleMipMapMinFilter( true );
     toggleTransparentCropping( true );
-    
+
     mainFont = new Font( getFontTGAFileName(), 6, 16, false, 16 );
     mainFont->setMinimumPositionPrecision( 1 );
 
     setViewCenterPosition( lastScreenViewCenter.x, lastScreenViewCenter.y );
 
     viewHeightFraction = inHeight / (double)inWidth;
-    
+
     if( viewHeightFraction < 9.0 / 16.0 ) {
         // weird, wider than 16:9 aspect ratio
-        
+
         viewWidth = viewHeight / viewHeightFraction;
         }
-    
+
 
     setViewSize( viewWidth );
     setLetterbox( visibleViewWidth, viewHeight );
@@ -440,116 +440,116 @@ void initFrameDrawer( int inWidth, int inHeight, int inTargetFrameRate,
 
     // it's always safe to call this, just in case we're launching post-update
     postUpdate();
-        
+
 
     instructionsSprite = loadWhiteSprite( "instructions.tga" );
-    
-    
+
+
 
     initAgeControl();
-    
+
     updateDataVersionNumber();
 
 
     AppLog::printOutNextMessage();
     AppLog::infoF( "OneLife client v%d (binV=%d, dataV=%d) starting up",
                    versionNumber, binVersionNumber, dataVersionNumber );
-            
+
 
     toggleLinearMagFilter( true );
     toggleMipMapGeneration( true );
     toggleMipMapMinFilter( true );
     toggleTransparentCropping( true );
-    
+
     gamePlayingBack = inPlayingBack;
-    
+
     screenW = inWidth;
     screenH = inHeight;
-    
+
     if( inTargetFrameRate != baseFramesPerSecond ) {
-        frameRateFactor = 
+        frameRateFactor =
             (double)baseFramesPerSecond / (double)inTargetFrameRate;
-        
+
         numLoadingSteps /= frameRateFactor;
         }
-    
+
     targetFramesPerSecond = inTargetFrameRate;
-    
-    
+
+
 
 
     setViewCenterPosition( lastScreenViewCenter.x, lastScreenViewCenter.y );
 
     viewHeightFraction = inHeight / (double)inWidth;
-    
+
 
     if( viewHeightFraction < 9.0 / 16.0 ) {
         // weird, wider than 16:9 aspect ratio
-        
+
         viewWidth = viewHeight / viewHeightFraction;
         }
-    
+
     setViewSize( viewWidth );
     setLetterbox( visibleViewWidth, viewHeight );
 
 
-    
-    
 
-    
+
+
+
 
     setCursorVisible( true );
     grabInput( false );
-    
+
     // world coordinates
     setMouseReportingMode( true );
-    
-    
-    
+
+
+
     mainFontReview = new Font( getFontTGAFileName(), 4, 8, false, 16 );
     mainFontReview->setMinimumPositionPrecision( 1 );
 
     mainFontFixed = new Font( getFontTGAFileName(), 6, 16, true, 16 );
     numbersFontFixed = new Font( getFontTGAFileName(), 6, 16, true, 16, 16 );
-    
+
     mainFontFixed->setMinimumPositionPrecision( 1 );
     numbersFontFixed->setMinimumPositionPrecision( 1 );
-    
+
     smallFont = new Font( getFontTGAFileName(), 3, 8, false, 8 );
 
 
-    handwritingFont = 
+    handwritingFont =
         new Font( "font_handwriting_32_32.tga", 3, 6, false, 16 );
 
     handwritingFont->setMinimumPositionPrecision( 1 );
 
-    pencilFont = 
+    pencilFont =
         new Font( "font_pencil_32_32.tga", 3, 6, false, 16 );
 
     pencilFont->setMinimumPositionPrecision( 1 );
 
-    pencilErasedFont = 
+    pencilErasedFont =
         new Font( "font_pencil_erased_32_32.tga", 3, 6, false, 16 );
 
     pencilErasedFont->setMinimumPositionPrecision( 1 );
 
     pencilErasedFont->copySpacing( pencilFont );
-    
-    
+
+
     float mouseSpeedSetting = 1.0f;
-    
+
     int musicOffSetting = 0;
     float musicLoudnessSetting = 1.0f;
-    
+
     int webRetrySecondsSetting = 10;
 
-    
+
     int readVersionNumber;
-    
-    int numRead = sscanf( inCustomRecordedGameData, 
-                          customDataFormatReadString, 
+
+    int numRead = sscanf( inCustomRecordedGameData,
+                          customDataFormatReadString,
                           &readVersionNumber,
-                          &mouseSpeedSetting, 
+                          &mouseSpeedSetting,
                           &musicOffSetting,
                           &musicLoudnessSetting,
                           &webRetrySecondsSetting );
@@ -560,18 +560,18 @@ void initFrameDrawer( int inWidth, int inHeight, int inTargetFrameRate,
 
         if( readVersionNumber != versionNumber ) {
             AppLog::printOutNextMessage();
-            AppLog::warningF( 
+            AppLog::warningF(
                 "WARNING:  version number in playback file is %d "
                 "but game version is %d...",
                 readVersionNumber, versionNumber );
             }
         }
 
-    
-    userEmail = SettingsManager::getStringSetting( "email" );    
+
+    userEmail = SettingsManager::getStringSetting( "email" );
     accountKey = SettingsManager::getStringSetting( "accountKey" );
 
-    
+
     double mouseParam = 0.000976562;
 
     mouseParam *= mouseSpeedSetting;
@@ -580,15 +580,15 @@ void initFrameDrawer( int inWidth, int inHeight, int inTargetFrameRate,
 
     musicOff = musicOffSetting;
     musicLoudness = musicLoudnessSetting;
-    
-    
+
+
     webRetrySeconds = webRetrySecondsSetting;
 
     reflectorURL = SettingsManager::getStringSetting( "reflectorURL" );
 
     if( reflectorURL == NULL ) {
-        reflectorURL = 
-            stringDuplicate( 
+        reflectorURL =
+            stringDuplicate(
                 "http://localhost/jcr13/oneLifeReflector/server.php" );
         }
 
@@ -597,18 +597,18 @@ void initFrameDrawer( int inWidth, int inHeight, int inTargetFrameRate,
     setSoundLoudness( 1.0 );
     setSoundPlaying( true );
 
-    
+
 
 
     const char *resultNamesA[4] = { "serverIP", "serverPort",
                                     "requiredVersionNumber",
                                     "autoUpdateURL" };
-    
+
     getServerAddressPage = new ServerActionPage( reflectorURL,
-                                                 "reflect", 
+                                                 "reflect",
                                                  4, resultNamesA, false );
-    
-    
+
+
     finalMessagePage = new FinalMessagePage;
     loadingPage = new LoadingPage;
     autoUpdatePage = new AutoUpdatePage;
@@ -619,16 +619,16 @@ void initFrameDrawer( int inWidth, int inHeight, int inTargetFrameRate,
     settingsPage = new SettingsPage;
 
 
-    char *reviewURL = 
+    char *reviewURL =
         SettingsManager::getStringSetting( "reviewServerURL", "" );
-    
+
     if( strcmp( reviewURL, "" ) == 0 ) {
         existingAccountPage->showReviewButton( false );
         rebirthChoicePage->showReviewButton( false );
         }
 
     reviewPage = new ReviewPage( reviewURL );
-    
+
     delete [] reviewURL;
 
     twinPage = new TwinPage();
@@ -638,12 +638,12 @@ void initFrameDrawer( int inWidth, int inHeight, int inTargetFrameRate,
     setVolumeScaling( 10, 0 );
     //setSoundSpriteRateRange( 0.95, 1.05 );
     setSoundSpriteVolumeRange( 0.60, 1.0 );
-    
+
     char rebuilding;
-    
-    int numSprites = 
+
+    int numSprites =
         initSpriteBankStart( &rebuilding );
-                        
+
     if( rebuilding ) {
         loadingPage->setCurrentPhase( translate( "spritesRebuild" ) );
         }
@@ -651,10 +651,10 @@ void initFrameDrawer( int inWidth, int inHeight, int inTargetFrameRate,
         loadingPage->setCurrentPhase( translate( "sprites" ) );
         }
     loadingPage->setCurrentProgress( 0 );
-                        
+
 
     loadingStepBatchSize = numSprites / numLoadingSteps;
-    
+
     if( loadingStepBatchSize < 1 ) {
         loadingStepBatchSize = 1;
         }
@@ -679,32 +679,32 @@ void freeFrameDrawer() {
 
 
     freeSprite( instructionsSprite );
-    
+
     delete mainFontReview;
     delete mainFontFixed;
     delete numbersFontFixed;
-    
+
     delete handwritingFont;
     delete pencilFont;
     delete pencilErasedFont;
-    
+
     delete smallFont;
-    
+
     if( currentUserTypedMessage != NULL ) {
         delete [] currentUserTypedMessage;
         currentUserTypedMessage = NULL;
         }
 
-    
+
 
     if( shutdownMessage != NULL ) {
         delete [] shutdownMessage;
         shutdownMessage = NULL;
         }
-    
+
 
     delete getServerAddressPage;
-    
+
     delete finalMessagePage;
     delete loadingPage;
     delete autoUpdatePage;
@@ -719,13 +719,13 @@ void freeFrameDrawer() {
     delete settingsPage;
     delete reviewPage;
     delete twinPage;
-    
+
     //if( testPage != NULL ) {
     //    delete testPage;
     //    testPage = NULL;
     //    }
 
-    
+
     freeGroundSprites();
 
     freeAnimationBank();
@@ -733,18 +733,18 @@ void freeFrameDrawer() {
     freeSpriteBank();
 
     freeTransBank();
-    
+
     freeCategoryBank();
 
     freeLiveObjectSet();
 
     freeSoundBank();
-    
+
     freeMusicPlayer();
     freeEmotion();
-    
+
     freePhotos();
-    
+
 
     if( reflectorURL != NULL ) {
         delete [] reflectorURL;
@@ -755,7 +755,7 @@ void freeFrameDrawer() {
         delete [] serverIP;
         serverIP = NULL;
         }
-    
+
 
     if( userEmail != NULL ) {
         delete [] userEmail;
@@ -772,11 +772,11 @@ void freeFrameDrawer() {
 
 
 
-    
+
 
 
 // draw code separated from updates
-// some updates are still embedded in draw code, so pass a switch to 
+// some updates are still embedded in draw code, so pass a switch to
 // turn them off
 static void drawFrameNoUpdate( char inUpdate );
 
@@ -788,14 +788,14 @@ static void drawPauseScreen() {
     double viewHeight = viewHeightFraction * viewWidth;
 
     setDrawColor( 1, 1, 1, 0.5 * pauseScreenFade );
-        
+
     drawSquare( lastScreenViewCenter, 1.05 * ( viewHeight / 3 ) );
-        
+
 
     setDrawColor( 0.2, 0.2, 0.2, 0.85 * pauseScreenFade  );
-        
+
     drawSquare( lastScreenViewCenter, viewHeight / 3 );
-        
+
 
     setDrawColor( 1, 1, 1, pauseScreenFade );
 
@@ -803,64 +803,64 @@ static void drawPauseScreen() {
 
     messagePos.y += 4.5  * (viewHeight / 15);
 
-    mainFont->drawString( translate( "pauseMessage1" ), 
+    mainFont->drawString( translate( "pauseMessage1" ),
                            messagePos, alignCenter );
-        
+
     messagePos.y -= 1.25 * (viewHeight / 15);
-    mainFont->drawString( translate( "pauseMessage2" ), 
+    mainFont->drawString( translate( "pauseMessage2" ),
                            messagePos, alignCenter );
 
 
     if( currentGamePage == livingLifePage ) {
-        
+
         doublePair drawPos = { -9, 0 };
-        
+
         drawPos = add( drawPos, lastScreenViewCenter );
 
         drawSprite( instructionsSprite, drawPos );
         }
-    
+
 
     if( currentUserTypedMessage != NULL ) {
-            
+
         messagePos.y -= 1.25 * (viewHeight / 15);
-            
+
         double maxWidth = 0.95 * ( viewHeight / 1.5 );
-            
+
         int maxLines = 9;
 
-        SimpleVector<char *> *tokens = 
+        SimpleVector<char *> *tokens =
             tokenizeString( currentUserTypedMessage );
 
 
         // collect all lines before drawing them
         SimpleVector<char *> lines;
-        
-            
+
+
         while( tokens->size() > 0 ) {
 
             // build up a a line
 
             // always take at least first token, even if it is too long
-            char *currentLineString = 
+            char *currentLineString =
                 stringDuplicate( *( tokens->getElement( 0 ) ) );
-                
+
             delete [] *( tokens->getElement( 0 ) );
             tokens->deleteElement( 0 );
-            
-            
 
-            
 
-            
+
+
+
+
             char nextTokenIsFileSeparator = false;
-                
+
             char *nextLongerString = NULL;
-                
+
             if( tokens->size() > 0 ) {
 
                 char *nextToken = *( tokens->getElement( 0 ) );
-                
+
                 if( nextToken[0] == 28 ) {
                     nextTokenIsFileSeparator = true;
                     }
@@ -870,32 +870,32 @@ static void drawPauseScreen() {
                                      currentLineString,
                                      *( tokens->getElement( 0 ) ) );
                     }
-                
+
                 }
-                
-            while( !nextTokenIsFileSeparator 
+
+            while( !nextTokenIsFileSeparator
                    &&
-                   nextLongerString != NULL 
-                   && 
-                   mainFont->measureString( nextLongerString ) 
-                   < maxWidth 
+                   nextLongerString != NULL
+                   &&
+                   mainFont->measureString( nextLongerString )
+                   < maxWidth
                    &&
                    tokens->size() > 0 ) {
-                    
+
                 delete [] currentLineString;
-                    
+
                 currentLineString = nextLongerString;
-                    
+
                 nextLongerString = NULL;
-                    
+
                 // token consumed
                 delete [] *( tokens->getElement( 0 ) );
                 tokens->deleteElement( 0 );
-                    
+
                 if( tokens->size() > 0 ) {
-                    
+
                     char *nextToken = *( tokens->getElement( 0 ) );
-                
+
                     if( nextToken[0] == 28 ) {
                         nextTokenIsFileSeparator = true;
                         }
@@ -907,33 +907,33 @@ static void drawPauseScreen() {
                         }
                     }
                 }
-                
-            if( nextLongerString != NULL ) {    
+
+            if( nextLongerString != NULL ) {
                 delete [] nextLongerString;
                 }
-                
-            while( mainFont->measureString( currentLineString ) > 
+
+            while( mainFont->measureString( currentLineString ) >
                    maxWidth ) {
-                    
+
                 // single token that is too long by itself
-                // simply trim it and discard part of it 
+                // simply trim it and discard part of it
                 // (user typing nonsense anyway)
-                    
+
                 currentLineString[ strlen( currentLineString ) - 1 ] =
                     '\0';
                 }
-                
-            if( currentLineString[ strlen( currentLineString ) - 1 ] 
+
+            if( currentLineString[ strlen( currentLineString ) - 1 ]
                 == ' ' ) {
                 // trim last bit of whitespace
-                currentLineString[ strlen( currentLineString ) - 1 ] = 
+                currentLineString[ strlen( currentLineString ) - 1 ] =
                     '\0';
                 }
 
-                
+
             lines.push_back( currentLineString );
 
-            
+
             if( nextTokenIsFileSeparator ) {
                 // file separator
 
@@ -944,7 +944,7 @@ static void drawPauseScreen() {
                 delete [] *( tokens->getElement( 0 ) );
                 tokens->deleteElement( 0 );
                 }
-            }   
+            }
 
 
         // all tokens deleted above
@@ -952,48 +952,48 @@ static void drawPauseScreen() {
 
 
         double messageLineSpacing = 0.625 * (viewHeight / 15);
-        
+
         int numLinesToSkip = lines.size() - maxLines;
 
         if( numLinesToSkip < 0 ) {
             numLinesToSkip = 0;
             }
-        
-        
+
+
         for( int i=0; i<numLinesToSkip-1; i++ ) {
             char *currentLineString = *( lines.getElement( i ) );
             delete [] currentLineString;
             }
-        
+
         int lastSkipLine = numLinesToSkip - 1;
 
         if( lastSkipLine >= 0 ) {
-            
+
             char *currentLineString = *( lines.getElement( lastSkipLine ) );
 
             // draw above and faded out somewhat
 
             doublePair lastSkipLinePos = messagePos;
-            
+
             lastSkipLinePos.y += messageLineSpacing;
 
             setDrawColor( 1, 1, 0.5, 0.125 * pauseScreenFade );
 
-            mainFont->drawString( currentLineString, 
+            mainFont->drawString( currentLineString,
                                    lastSkipLinePos, alignCenter );
 
-            
+
             delete [] currentLineString;
             }
-        
+
 
         setDrawColor( 1, 1, 0.5, pauseScreenFade );
 
         for( int i=numLinesToSkip; i<lines.size(); i++ ) {
             char *currentLineString = *( lines.getElement( i ) );
-            
+
             if( false && lastSkipLine >= 0 ) {
-            
+
                 if( i == numLinesToSkip ) {
                     // next to last
                     setDrawColor( 1, 1, 0.5, 0.25 * pauseScreenFade );
@@ -1007,35 +1007,35 @@ static void drawPauseScreen() {
                     setDrawColor( 1, 1, 0.5, pauseScreenFade );
                     }
                 }
-            
-            mainFont->drawString( currentLineString, 
+
+            mainFont->drawString( currentLineString,
                                    messagePos, alignCenter );
 
             delete [] currentLineString;
-                
+
             messagePos.y -= messageLineSpacing;
             }
         }
-        
-        
+
+
 
     setDrawColor( 1, 1, 1, pauseScreenFade );
 
     messagePos = lastScreenViewCenter;
 
     messagePos.y -= 3.75 * ( viewHeight / 15 );
-    //mainFont->drawString( translate( "pauseMessage3" ), 
+    //mainFont->drawString( translate( "pauseMessage3" ),
     //                      messagePos, alignCenter );
 
     messagePos.y -= 0.625 * (viewHeight / 15);
 
     const char* quitMessageKey = "pauseMessage3";
-    
+
     if( isQuittingBlocked() ) {
         quitMessageKey = "pauseMessage3b";
         }
 
-    mainFont->drawString( translate( quitMessageKey ), 
+    mainFont->drawString( translate( quitMessageKey ),
                           messagePos, alignCenter );
 
     }
@@ -1044,9 +1044,9 @@ static void drawPauseScreen() {
 
 void deleteCharFromUserTypedMessage() {
     if( currentUserTypedMessage != NULL ) {
-                    
+
         int length = strlen( currentUserTypedMessage );
-        
+
         char fileSeparatorDeleted = false;
         if( length > 2 ) {
             if( currentUserTypedMessage[ length - 2 ] == 28 ) {
@@ -1068,48 +1068,48 @@ void deleteCharFromUserTypedMessage() {
 
 static void startConnecting() {
     userReconnect = false;
-    
+
     if( SettingsManager::getIntSetting( "useCustomServer", 0 ) ) {
         usingCustomServer = true;
-        
+
         if( serverIP != NULL ) {
             delete [] serverIP;
             serverIP = NULL;
             }
-        serverIP = SettingsManager::getStringSetting( 
+        serverIP = SettingsManager::getStringSetting(
             "customServerAddress" );
         if( serverIP == NULL ) {
             serverIP = stringDuplicate( "127.0.0.1" );
             }
-        serverPort = SettingsManager::getIntSetting( 
+        serverPort = SettingsManager::getIntSetting(
             "customServerPort", 8005 );
 
-        printf( "Using custom server address: %s:%d\n", 
+        printf( "Using custom server address: %s:%d\n",
                 serverIP, serverPort );
-                    
+
         currentGamePage = livingLifePage;
         currentGamePage->base_makeActive( true );
         }
     else {
         usingCustomServer = false;
-        
+
         printf( "Starting fetching server URL from reflector %s\n",
                 reflectorURL );
-                
+
         getServerAddressPage->clearActionParameters();
-        
-            
-        getServerAddressPage->setActionParameter( "email", 
+
+
+        getServerAddressPage->setActionParameter( "email",
                                                   userEmail );
-        
+
         if( userTwinCode != NULL ) {
             char *codeHash = computeSHA1Digest( userTwinCode );
-            getServerAddressPage->setActionParameter( "twin_code", 
+            getServerAddressPage->setActionParameter( "twin_code",
                                                       codeHash );
             delete [] codeHash;
             }
-        
-                    
+
+
         currentGamePage = getServerAddressPage;
         currentGamePage->base_makeActive( true );
         }
@@ -1120,29 +1120,29 @@ static void startConnecting() {
 
 void showDiedPage() {
     userReconnect = false;
-    
+
     lastScreenViewCenter.x = 0;
     lastScreenViewCenter.y = 0;
-    
-    setViewCenterPosition( lastScreenViewCenter.x, 
+
+    setViewCenterPosition( lastScreenViewCenter.x,
                            lastScreenViewCenter.y );
-    
+
     currentGamePage = extendedMessagePage;
-    
+
     extendedMessagePage->setMessageKey( "youDied" );
-    
+
     char *reason = livingLifePage->getDeathReason();
-    
+
     if( reason == NULL ) {
         extendedMessagePage->setSubMessage( "" );
         }
     else {
         extendedMessagePage->setSubMessage( reason );
-        
+
         delete [] reason;
         }
-    
-    
+
+
     currentGamePage->base_makeActive( true );
     }
 
@@ -1151,42 +1151,42 @@ void showDiedPage() {
 void showReconnectPage() {
     lastScreenViewCenter.x = 0;
     lastScreenViewCenter.y = 0;
-    
-    setViewCenterPosition( lastScreenViewCenter.x, 
+
+    setViewCenterPosition( lastScreenViewCenter.x,
                            lastScreenViewCenter.y );
-    
+
     currentGamePage = extendedMessagePage;
-    
+
     extendedMessagePage->setMessageKey( "connectionLost" );
 
     extendedMessagePage->setSubMessage( translate( "willTryReconnect" ) );
-    
+
     userReconnect = true;
-    
+
     // don't reconnect as twin
     // that will cause them to wait for their party again.
     if( userTwinCode != NULL ) {
         delete [] userTwinCode;
         userTwinCode = NULL;
         }
-    
+
     currentGamePage->base_makeActive( true );
     }
 
-    
 
-void drawFrame( char inUpdate ) {    
+
+void drawFrame( char inUpdate ) {
 
 
     if( !inUpdate ) {
-        
+
         // because this is a networked game, we can't actually pause
         stepSpriteBank();
-        
+
         stepSoundBank();
-        
+
         stepMusicPlayer();
-    
+
         if( currentGamePage != NULL ) {
             currentGamePage->base_step();
             }
@@ -1194,28 +1194,28 @@ void drawFrame( char inUpdate ) {
 
 
         drawFrameNoUpdate( true );
-            
+
         drawPauseScreen();
-        
+
 
         // handle delete key repeat
         if( holdDeleteKeySteps > -1 ) {
             holdDeleteKeySteps ++;
-            
-            if( holdDeleteKeySteps > stepsBetweenDeleteRepeat ) {        
+
+            if( holdDeleteKeySteps > stepsBetweenDeleteRepeat ) {
                 // delete repeat
 
                 // platform layer doesn't receive event for key held down
                 // tell it we are still active so that it doesn't
                 // reduce the framerate during long, held deletes
                 wakeUpPauseFrameRate();
-                
+
 
 
                 // subtract from messsage
                 deleteCharFromUserTypedMessage();
-                
-                            
+
+
 
                 // shorter delay for subsequent repeats
                 stepsBetweenDeleteRepeat = (int)( 2/ frameRateFactor );
@@ -1226,13 +1226,13 @@ void drawFrame( char inUpdate ) {
         // fade in pause screen
         if( pauseScreenFade < 1 ) {
             pauseScreenFade += ( 1.0 / 30 ) * frameRateFactor;
-        
+
             if( pauseScreenFade > 1 ) {
                 pauseScreenFade = 1;
                 }
             }
-        
-        
+
+
         // keep checking for this signal even if paused
         if( currentGamePage == livingLifePage &&
             livingLifePage->checkSignal( "died" ) ) {
@@ -1240,10 +1240,10 @@ void drawFrame( char inUpdate ) {
             }
         if( currentGamePage == livingLifePage &&
             livingLifePage->checkSignal( "disconnect" ) ) {
-    
+
             showReconnectPage();
             }
-        
+
 
         return;
         }
@@ -1255,7 +1255,7 @@ void drawFrame( char inUpdate ) {
     // fade pause screen out
     if( pauseScreenFade > 0 ) {
         pauseScreenFade -= ( 1.0 / 30 ) * frameRateFactor;
-        
+
         if( pauseScreenFade < 0 ) {
             pauseScreenFade = 0;
 
@@ -1268,36 +1268,36 @@ void drawFrame( char inUpdate ) {
 
                 if( lengthCurrent < 2 ||
                     currentUserTypedMessage[ lengthCurrent - 2 ] != 28 ) {
-                         
-                        
+
+
                     // insert at file separator (ascii 28)
-                    
+
                     char *oldMessage = currentUserTypedMessage;
-                    
-                    currentUserTypedMessage = autoSprintf( "%s %c ", 
+
+                    currentUserTypedMessage = autoSprintf( "%s %c ",
                                                            oldMessage,
                                                            28 );
                     delete [] oldMessage;
                     }
                 }
             }
-        }    
-    
-    
+        }
+
+
 
     if( !firstDrawFrameCalled ) {
-        
+
         // do final init step... stuff that shouldn't be done until
         // we have control of screen
-        
-        char *moveKeyMapping = 
+
+        char *moveKeyMapping =
             SettingsManager::getStringSetting( "upLeftDownRightKeys" );
-    
+
         if( moveKeyMapping != NULL ) {
             char *temp = stringToLowerCase( moveKeyMapping );
             delete [] moveKeyMapping;
             moveKeyMapping = temp;
-        
+
             if( strlen( moveKeyMapping ) == 4 &&
                 strcmp( moveKeyMapping, "wasd" ) != 0 ) {
                 // different assignment
@@ -1321,39 +1321,39 @@ void drawFrame( char inUpdate ) {
 
     // updates here
     stepSpriteBank();
-    
+
     stepSoundBank();
-    
+
     stepMusicPlayer();
-    
+
     stepPhotos();
-    
+
 
     if( currentGamePage != NULL ) {
         currentGamePage->base_step();
 
 
         if( currentGamePage == loadingPage ) {
-            
+
             switch( loadingPhase ) {
                 case 0: {
                     float progress;
-                    for( int i=0; i<loadingStepBatchSize; i++ ) {    
+                    for( int i=0; i<loadingStepBatchSize; i++ ) {
                         progress = initSpriteBankStep();
                         loadingPage->setCurrentProgress( progress );
                         }
-                    
+
                     if( progress == 1.0 ) {
                         initSpriteBankFinish();
-                        
+
                         loadingPhaseStartTime = Time::getCurrentTime();
-      
+
                         char rebuilding;
 
                         int numSounds = initSoundBankStart( &rebuilding );
 
                         if( rebuilding ) {
-                            loadingPage->setCurrentPhase( 
+                            loadingPage->setCurrentPhase(
                                 translate( "soundsRebuild" ) );
                             }
                         else {
@@ -1362,37 +1362,37 @@ void drawFrame( char inUpdate ) {
                             }
 
                         loadingPage->setCurrentProgress( 0 );
-                        
-                            
+
+
                         loadingStepBatchSize = numSounds / numLoadingSteps;
-                        
+
                         if( loadingStepBatchSize < 1 ) {
                             loadingStepBatchSize = 1;
                             }
-                        
+
                         loadingPhase ++;
                         }
                     break;
                     }
                 case 1: {
                     float progress;
-                    for( int i=0; i<loadingStepBatchSize; i++ ) {    
+                    for( int i=0; i<loadingStepBatchSize; i++ ) {
                         progress = initSoundBankStep();
                         loadingPage->setCurrentProgress( progress );
                         }
-                    
+
                     if( progress == 1.0 ) {
                         initSoundBankFinish();
-                        
+
                         loadingPhaseStartTime = Time::getCurrentTime();
-                        
+
                         char rebuilding;
-                        
-                        int numAnimations = 
+
+                        int numAnimations =
                             initAnimationBankStart( &rebuilding );
-                        
+
                         if( rebuilding ) {
-                            loadingPage->setCurrentPhase( 
+                            loadingPage->setCurrentPhase(
                                 translate( "animationsRebuild" ) );
                             }
                         else {
@@ -1400,50 +1400,50 @@ void drawFrame( char inUpdate ) {
                                 translate( "animations" ) );
                             }
                         loadingPage->setCurrentProgress( 0 );
-                        
+
 
                         loadingStepBatchSize = numAnimations / numLoadingSteps;
-                        
+
                         if( loadingStepBatchSize < 1 ) {
                             loadingStepBatchSize = 1;
                             }
-                        
+
                         loadingPhase ++;
                         }
                     break;
                     }
                 case 2: {
                     float progress;
-                    for( int i=0; i<loadingStepBatchSize; i++ ) {    
+                    for( int i=0; i<loadingStepBatchSize; i++ ) {
                         progress = initAnimationBankStep();
                         loadingPage->setCurrentProgress( progress );
                         }
-                    
+
                     if( progress == 1.0 ) {
                         initAnimationBankFinish();
                         printf( "Finished loading animation bank in %f sec\n",
-                                Time::getCurrentTime() - 
+                                Time::getCurrentTime() -
                                 loadingPhaseStartTime );
                         loadingPhaseStartTime = Time::getCurrentTime();
 
                         char rebuilding;
-                        
-                        int numObjects = 
+
+                        int numObjects =
                             initObjectBankStart( &rebuilding, true, true );
-                        
+
                         if( rebuilding ) {
                             loadingPage->setCurrentPhase(
                                 translate( "objectsRebuild" ) );
                             }
                         else {
-                            loadingPage->setCurrentPhase( 
+                            loadingPage->setCurrentPhase(
                                 translate( "objects" ) );
                             }
                         loadingPage->setCurrentProgress( 0 );
-                        
+
 
                         loadingStepBatchSize = numObjects / numLoadingSteps;
-                        
+
                         if( loadingStepBatchSize < 1 ) {
                             loadingStepBatchSize = 1;
                             }
@@ -1454,36 +1454,36 @@ void drawFrame( char inUpdate ) {
                     }
                 case 3: {
                     float progress;
-                    for( int i=0; i<loadingStepBatchSize; i++ ) {    
+                    for( int i=0; i<loadingStepBatchSize; i++ ) {
                         progress = initObjectBankStep();
                         loadingPage->setCurrentProgress( progress );
                         }
-                    
+
                     if( progress == 1.0 ) {
                         initObjectBankFinish();
                         printf( "Finished loading object bank in %f sec\n",
-                                Time::getCurrentTime() - 
+                                Time::getCurrentTime() -
                                 loadingPhaseStartTime );
                         loadingPhaseStartTime = Time::getCurrentTime();
 
                         char rebuilding;
-                        
-                        int numCats = 
+
+                        int numCats =
                             initCategoryBankStart( &rebuilding );
-                        
+
                         if( rebuilding ) {
                             loadingPage->setCurrentPhase(
                                 translate( "categoriesRebuild" ) );
                             }
                         else {
-                            loadingPage->setCurrentPhase( 
+                            loadingPage->setCurrentPhase(
                                 translate( "categories" ) );
                             }
                         loadingPage->setCurrentProgress( 0 );
-                        
+
 
                         loadingStepBatchSize = numCats / numLoadingSteps;
-                        
+
                         if( loadingStepBatchSize < 1 ) {
                             loadingStepBatchSize = 1;
                             }
@@ -1494,39 +1494,39 @@ void drawFrame( char inUpdate ) {
                     }
                 case 4: {
                     float progress;
-                    for( int i=0; i<loadingStepBatchSize; i++ ) {    
+                    for( int i=0; i<loadingStepBatchSize; i++ ) {
                         progress = initCategoryBankStep();
                         loadingPage->setCurrentProgress( progress );
                         }
-                    
+
                     if( progress == 1.0 ) {
                         initCategoryBankFinish();
                         printf( "Finished loading category bank in %f sec\n",
-                                Time::getCurrentTime() - 
+                                Time::getCurrentTime() -
                                 loadingPhaseStartTime );
                         loadingPhaseStartTime = Time::getCurrentTime();
 
                         char rebuilding;
-                        
+
                         // true to auto-generate concrete transitions
                         // for all abstract category transitions
-                        int numTrans = 
+                        int numTrans =
                             initTransBankStart( &rebuilding, true, true, true,
                                                 true );
-                        
+
                         if( rebuilding ) {
                             loadingPage->setCurrentPhase(
                                 translate( "transitionsRebuild" ) );
                             }
                         else {
-                            loadingPage->setCurrentPhase( 
+                            loadingPage->setCurrentPhase(
                                 translate( "transitions" ) );
                             }
                         loadingPage->setCurrentProgress( 0 );
-                        
+
 
                         loadingStepBatchSize = numTrans / numLoadingSteps;
-                        
+
                         if( loadingStepBatchSize < 1 ) {
                             loadingStepBatchSize = 1;
                             }
@@ -1537,28 +1537,28 @@ void drawFrame( char inUpdate ) {
                     }
                 case 5: {
                     float progress;
-                    for( int i=0; i<loadingStepBatchSize; i++ ) {    
+                    for( int i=0; i<loadingStepBatchSize; i++ ) {
                         progress = initTransBankStep();
                         loadingPage->setCurrentProgress( progress );
                         }
-                    
+
                     if( progress == 1.0 ) {
                         initTransBankFinish();
                         printf( "Finished loading transition bank in %f sec\n",
-                                Time::getCurrentTime() - 
+                                Time::getCurrentTime() -
                                 loadingPhaseStartTime );
-                        
+
                         loadingPhaseStartTime = Time::getCurrentTime();
 
-                        loadingPage->setCurrentPhase( 
+                        loadingPage->setCurrentPhase(
                             translate( "groundTextures" ) );
 
                         loadingPage->setCurrentProgress( 0 );
-                        
+
                         initGroundSpritesStart();
 
                         loadingStepBatchSize = 1;
-                        
+
 
                         loadingPhase ++;
                         }
@@ -1566,26 +1566,26 @@ void drawFrame( char inUpdate ) {
                     }
                 case 6: {
                     float progress;
-                    for( int i=0; i<loadingStepBatchSize; i++ ) {    
+                    for( int i=0; i<loadingStepBatchSize; i++ ) {
                         progress = initGroundSpritesStep();
                         loadingPage->setCurrentProgress( progress );
                         }
-                    
+
                     if( progress == 1.0 ) {
                         initGroundSpritesFinish();
                         printf( "Finished loading ground sprites in %f sec\n",
-                                Time::getCurrentTime() - 
+                                Time::getCurrentTime() -
                                 loadingPhaseStartTime );
-                        
+
                         loadingPhaseStartTime = Time::getCurrentTime();
 
-                        
+
                         initLiveObjectSet();
 
                         loadingPhaseStartTime = Time::getCurrentTime();
 
                         livingLifePage = new LivingLifePage();
-                    
+
                         loadingPhase ++;
                         }
                     break;
@@ -1593,17 +1593,17 @@ void drawFrame( char inUpdate ) {
                 default:
                     // NOW game engine can start measuring frame rate
                     loadingComplete();
-                    
+
 
                     initEmotion();
                     initPhotos();
-                    
+
                     initMusicPlayer();
                     setMusicLoudness( musicLoudness );
-                    
-                    mapPullMode = 
+
+                    mapPullMode =
                         SettingsManager::getIntSetting( "mapPullMode", 0 );
-                    autoLogIn = 
+                    autoLogIn =
                         SettingsManager::getIntSetting( "autoLogIn", 0 );
 
                     if( userEmail == NULL || accountKey == NULL ) {
@@ -1622,18 +1622,18 @@ void drawFrame( char inUpdate ) {
                 }
             else if( settingsPage->checkSignal( "editAccount" ) ) {
                 loginEditOverride = true;
-                
+
                 existingAccountPage->setStatus( "editAccountWarning", false );
                 existingAccountPage->setStatusPositiion( true );
-                
+
                 currentGamePage = existingAccountPage;
                 currentGamePage->base_makeActive( true );
                 }
             else if( settingsPage->checkSignal( "relaunchFailed" ) ) {
                 currentGamePage = finalMessagePage;
-                        
+
                 finalMessagePage->setMessageKey( "manualRestartMessage" );
-                                
+
                 currentGamePage->base_makeActive( true );
                 }
 
@@ -1655,7 +1655,7 @@ void drawFrame( char inUpdate ) {
                 startConnecting();
                 }
             }
-        else if( currentGamePage == existingAccountPage ) {    
+        else if( currentGamePage == existingAccountPage ) {
             if( existingAccountPage->checkSignal( "quit" ) ) {
                 quitGame();
                 }
@@ -1672,14 +1672,14 @@ void drawFrame( char inUpdate ) {
                 currentGamePage->base_makeActive( true );
                 }
             else if( existingAccountPage->checkSignal( "done" )
-                     || 
+                     ||
                      mapPullMode || autoLogIn ) {
-                
+
                 // auto-log-in one time for map pull
                 // or one time for autoLogInMode
                 mapPullMode = false;
                 autoLogIn = false;
-                
+
                 // login button clears twin status
                 // they have to login from twin page to play as twin
                 if( userTwinCode != NULL ) {
@@ -1703,86 +1703,86 @@ void drawFrame( char inUpdate ) {
                 }
             else if( autoUpdatePage->checkSignal( "relaunchFailed" ) ) {
                 currentGamePage = finalMessagePage;
-                        
+
                 finalMessagePage->setMessageKey( "manualRestartMessage" );
-                                
+
                 currentGamePage->base_makeActive( true );
                 }
             }
         else if( currentGamePage == getServerAddressPage ) {
             if( getServerAddressPage->isResponseReady() ) {
-                
+
                 if( serverIP != NULL ) {
                     delete [] serverIP;
                     }
 
                 serverIP = getServerAddressPage->getResponse( "serverIP" );
-                
-                serverPort = 
+
+                serverPort =
                     getServerAddressPage->getResponseInt( "serverPort" );
-                
-                
+
+
                 if( strstr( serverIP, "NONE_FOUND" ) != NULL ) {
-                    
+
                     currentGamePage = finalMessagePage;
-                        
+
                     finalMessagePage->setMessageKey( "serverShutdownMessage" );
-                    
-                    
+
+
                     currentGamePage->base_makeActive( true );
                     }
                 else {
-                    
 
-                    printf( "Got server address: %s:%d\n", 
+
+                    printf( "Got server address: %s:%d\n",
                             serverIP, serverPort );
-                
+
                     int requiredVersion =
-                        getServerAddressPage->getResponseInt( 
+                        getServerAddressPage->getResponseInt(
                             "requiredVersionNumber" );
-                    
+
                     if( versionNumber < requiredVersion ) {
 
-                        if( SettingsManager::getIntSetting( 
+                        if( SettingsManager::getIntSetting(
                                 "useSteamUpdate", 0 ) ) {
-                            
+
                             // flag SteamGate that app needs update
                             FILE *f = fopen( "steamGateForceUpdate.txt", "w" );
-                            if( f != NULL ) {    
+                            if( f != NULL ) {
                                 fprintf( f, "1" );
                                 fclose( f );
                                 }
-                            
+
                             // launch steamGateClient in parallel
                             // it will tell Steam that the app is dirty
                             // and needs to be updated.
                             runSteamGateClient();
-                            
 
-                            
+
+
                             currentGamePage = finalMessagePage;
-                                
-                            finalMessagePage->setMessageKey( 
+
+                            finalMessagePage->setMessageKey(
                                 "upgradeMessageSteam" );
-                            
-                            currentGamePage->base_makeActive( true );    
+
+                            currentGamePage->base_makeActive( true );
                             }
                         else {
-                            char *autoUpdateURL = 
-                                getServerAddressPage->getResponse( 
+                            char *autoUpdateURL =
+                                getServerAddressPage->getResponse(
                                     "autoUpdateURL" );
 
-                            char updateStarted = 
+                            char updateStarted =
                                 startUpdate( autoUpdateURL, versionNumber );
-                        
+
                             delete [] autoUpdateURL;
-                            
+
                             if( ! updateStarted ) {
                                 currentGamePage = finalMessagePage;
-                                
-                                finalMessagePage->setMessageKey( 
+
+                                finalMessagePage->setMessageKey(
                                     "upgradeMessage" );
-                                
+
                                 currentGamePage->base_makeActive( true );
                                 }
                             else {
@@ -1802,24 +1802,24 @@ void drawFrame( char inUpdate ) {
         else  if( currentGamePage == autoUpdatePage ) {
             if( autoUpdatePage->checkSignal( "failed" ) ) {
                 currentGamePage = finalMessagePage;
-                        
+
                 finalMessagePage->setMessageKey( "upgradeMessage" );
-                        
+
                 currentGamePage->base_makeActive( true );
                 }
             else if( autoUpdatePage->checkSignal( "writeError" ) ) {
                 currentGamePage = finalMessagePage;
-                
-                finalMessagePage->setMessageKey( 
+
+                finalMessagePage->setMessageKey(
                     "updateWritePermissionMessage" );
-                        
+
                 currentGamePage->base_makeActive( true );
                 }
             else if( autoUpdatePage->checkSignal( "relaunchFailed" ) ) {
                 currentGamePage = finalMessagePage;
-                        
+
                 finalMessagePage->setMessageKey( "manualRestartMessage" );
-                                
+
                 currentGamePage->base_makeActive( true );
                 }
             }
@@ -1828,11 +1828,11 @@ void drawFrame( char inUpdate ) {
                 lastScreenViewCenter.x = 0;
                 lastScreenViewCenter.y = 0;
 
-                setViewCenterPosition( lastScreenViewCenter.x, 
+                setViewCenterPosition( lastScreenViewCenter.x,
                                        lastScreenViewCenter.y );
-                
+
                 currentGamePage = existingAccountPage;
-                
+
                 existingAccountPage->setStatus( "loginFailed", true );
 
                 existingAccountPage->setStatusPositiion( true );
@@ -1843,11 +1843,11 @@ void drawFrame( char inUpdate ) {
                 lastScreenViewCenter.x = 0;
                 lastScreenViewCenter.y = 0;
 
-                setViewCenterPosition( lastScreenViewCenter.x, 
+                setViewCenterPosition( lastScreenViewCenter.x,
                                        lastScreenViewCenter.y );
-                
+
                 currentGamePage = existingAccountPage;
-                
+
                 existingAccountPage->setStatus( "connectionFailed", true );
 
                 existingAccountPage->setStatusPositiion( true );
@@ -1858,11 +1858,11 @@ void drawFrame( char inUpdate ) {
                 lastScreenViewCenter.x = 0;
                 lastScreenViewCenter.y = 0;
 
-                setViewCenterPosition( lastScreenViewCenter.x, 
+                setViewCenterPosition( lastScreenViewCenter.x,
                                        lastScreenViewCenter.y );
-                
+
                 currentGamePage = existingAccountPage;
-                
+
                 char *message = autoSprintf( translate( "versionMismatch" ),
                                              versionNumber,
                                              livingLifePage->
@@ -1871,39 +1871,39 @@ void drawFrame( char inUpdate ) {
                 if( SettingsManager::getIntSetting( "useCustomServer", 0 ) ) {
                     existingAccountPage->showDisableCustomServerButton( true );
                     }
-                
+
 
                 existingAccountPage->setStatusDirect( message, true );
-                
+
                 delete [] message;
-                
+
                 existingAccountPage->setStatusPositiion( true );
 
                 currentGamePage->base_makeActive( true );
                 }
             else if( livingLifePage->checkSignal( "twinCancel" ) ) {
-                
+
                 existingAccountPage->setStatus( NULL, false );
 
                 lastScreenViewCenter.x = 0;
                 lastScreenViewCenter.y = 0;
 
-                setViewCenterPosition( lastScreenViewCenter.x, 
+                setViewCenterPosition( lastScreenViewCenter.x,
                                        lastScreenViewCenter.y );
-                
+
                 currentGamePage = existingAccountPage;
-                
+
                 currentGamePage->base_makeActive( true );
                 }
             else if( livingLifePage->checkSignal( "serverShutdown" ) ) {
                 lastScreenViewCenter.x = 0;
                 lastScreenViewCenter.y = 0;
 
-                setViewCenterPosition( lastScreenViewCenter.x, 
+                setViewCenterPosition( lastScreenViewCenter.x,
                                        lastScreenViewCenter.y );
-                
+
                 currentGamePage = existingAccountPage;
-                
+
                 existingAccountPage->setStatus( "serverShutdown", true );
 
                 existingAccountPage->setStatusPositiion( true );
@@ -1914,11 +1914,11 @@ void drawFrame( char inUpdate ) {
                 lastScreenViewCenter.x = 0;
                 lastScreenViewCenter.y = 0;
 
-                setViewCenterPosition( lastScreenViewCenter.x, 
+                setViewCenterPosition( lastScreenViewCenter.x,
                                        lastScreenViewCenter.y );
-                
+
                 currentGamePage = existingAccountPage;
-                
+
                 existingAccountPage->setStatus( "serverUpdate", true );
 
                 existingAccountPage->setStatusPositiion( true );
@@ -1929,11 +1929,11 @@ void drawFrame( char inUpdate ) {
                 lastScreenViewCenter.x = 0;
                 lastScreenViewCenter.y = 0;
 
-                setViewCenterPosition( lastScreenViewCenter.x, 
+                setViewCenterPosition( lastScreenViewCenter.x,
                                        lastScreenViewCenter.y );
-                
+
                 currentGamePage = existingAccountPage;
-                
+
                 existingAccountPage->setStatus( "serverFull", true );
 
                 existingAccountPage->setStatusPositiion( true );
@@ -1948,18 +1948,18 @@ void drawFrame( char inUpdate ) {
                 }
             else if( livingLifePage->checkSignal( "loadFailure" ) ) {
                 currentGamePage = finalMessagePage;
-                        
+
                 finalMessagePage->setMessageKey( "loadingMapFailedMessage" );
-                
+
                 char *failedFileName = getSpriteBankLoadFailure();
                 if( failedFileName == NULL ) {
                     failedFileName = getSoundBankLoadFailure();
                     }
 
                 if( failedFileName != NULL ) {
-                    
-                    char *detailMessage = 
-                        autoSprintf( translate( "loadingMapFailedSubMessage" ), 
+
+                    char *detailMessage =
+                        autoSprintf( translate( "loadingMapFailedSubMessage" ),
                                      failedFileName );
                     finalMessagePage->setSubMessage( detailMessage );
                     delete [] detailMessage;
@@ -1970,9 +1970,9 @@ void drawFrame( char inUpdate ) {
             }
         else if( currentGamePage == extendedMessagePage ) {
             if( extendedMessagePage->checkSignal( "done" ) ) {
-                
+
                 extendedMessagePage->setSubMessage( "" );
-                
+
                 if( userReconnect ) {
                     currentGamePage = livingLifePage;
                     }
@@ -1986,7 +1986,7 @@ void drawFrame( char inUpdate ) {
             if( rebirthChoicePage->checkSignal( "reborn" ) ) {
                 // get server address again from scratch, in case
                 // the server we were on just crashed
-                
+
                 // but keep twin status, if set
                 startConnecting();
                 }
@@ -2013,7 +2013,7 @@ void drawFrame( char inUpdate ) {
                 }
             }
         }
-    
+
 
 
     // now draw stuff AFTER all updates
@@ -2061,21 +2061,21 @@ void pointerMove( float inX, float inY ) {
     // ignore mouse positions that are the same as the last one
     // only save data when mouse actually moving
     if( bufferValue != lastBufferedMouseValue ) {
-        
+
         mouseDataBuffer[ nextMouseDataIndex ] = bufferValue;
         lastBufferedMouseValue = bufferValue;
-        
+
         nextMouseDataIndex ++;
         if( nextMouseDataIndex >= mouseDataBufferSize ) {
             nextMouseDataIndex = 0;
             }
         }
-    
+
 
     if( isPaused() ) {
         return;
         }
-    
+
     if( currentGamePage != NULL ) {
         currentGamePage->base_pointerMove( inX, inY );
         }
@@ -2089,7 +2089,7 @@ void pointerDown( float inX, float inY ) {
     if( isPaused() ) {
         return;
         }
-    
+
     if( currentGamePage != NULL ) {
         currentGamePage->base_pointerDown( inX, inY );
         }
@@ -2127,7 +2127,7 @@ void pointerUp( float inX, float inY ) {
 void keyDown( unsigned char inASCII ) {
 
     // taking screen shot is ALWAYS possible
-    if( inASCII == '=' ) {    
+    if( inASCII == '=' ) {
         saveScreenShot( "screen" );
         }
     /*
@@ -2139,7 +2139,7 @@ void keyDown( unsigned char inASCII ) {
         }
     */
 
-    
+
     if( isPaused() ) {
         // block general keyboard control during pause
 
@@ -2150,11 +2150,11 @@ void keyDown( unsigned char inASCII ) {
                 pauseGame();
                 break;
             }
-        
+
         // don't let user type on pause screen anymore
         return;
 
-        
+
         if( inASCII == 127 || inASCII == 8 ) {
             // subtract from it
 
@@ -2167,10 +2167,10 @@ void keyDown( unsigned char inASCII ) {
         else if( inASCII >= 32 ) {
             // add to it
             if( currentUserTypedMessage != NULL ) {
-                
+
                 char *oldMessage = currentUserTypedMessage;
 
-                currentUserTypedMessage = autoSprintf( "%s%c", 
+                currentUserTypedMessage = autoSprintf( "%s%c",
                                                        oldMessage, inASCII );
                 delete [] oldMessage;
                 }
@@ -2178,17 +2178,17 @@ void keyDown( unsigned char inASCII ) {
                 currentUserTypedMessage = autoSprintf( "%c", inASCII );
                 }
             }
-        
+
         return;
         }
-    
+
 
     if( currentGamePage != NULL ) {
         currentGamePage->base_keyDown( inASCII );
         }
 
 
-    
+
     switch( inASCII ) {
         case 'm':
         case 'M': {
@@ -2230,7 +2230,7 @@ void specialKeyDown( int inKey ) {
     if( isPaused() ) {
         return;
         }
-    
+
     if( currentGamePage != NULL ) {
         currentGamePage->base_specialKeyDown( inKey );
         }
@@ -2246,13 +2246,13 @@ void specialKeyUp( int inKey ) {
     if( currentGamePage != NULL ) {
         currentGamePage->base_specialKeyUp( inKey );
         }
-	} 
+	}
 
 
 
 
 char getUsesSound() {
-    
+
     return ! musicOff;
     }
 
@@ -2265,26 +2265,26 @@ char getUsesSound() {
 
 
 void drawString( const char *inString, char inForceCenter ) {
-    
+
     setDrawColor( 1, 1, 1, 0.75 );
 
     doublePair messagePos = lastScreenViewCenter;
 
     TextAlignment align = alignCenter;
-    
+
     if( initDone && !inForceCenter ) {
         // transparent message
         setDrawColor( 1, 1, 1, 0.75 );
 
         // stick messages in corner
         messagePos.x -= viewWidth / 2;
-        
-        messagePos.x +=  20;
-    
 
-    
+        messagePos.x +=  20;
+
+
+
         messagePos.y += (viewWidth * viewHeightFraction) /  2;
-    
+
         messagePos.y -= 32;
 
         align = alignLeft;
@@ -2295,18 +2295,18 @@ void drawString( const char *inString, char inForceCenter ) {
 
         // leave centered
         }
-    
+
 
     int numLines;
-    
+
     char **lines = split( inString, "\n", &numLines );
-    
+
     for( int i=0; i<numLines; i++ ) {
-        
+
 
         mainFont->drawString( lines[i], messagePos, align );
         messagePos.y -= 32;
-        
+
         delete [] lines[i];
         }
     delete [] lines;
