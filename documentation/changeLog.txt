@@ -3,7 +3,7 @@ This file only list changes to game code.  Changes to content can be found here:
 http://onehouronelife.com/updateLog.php
 
 
-Version 220    ???
+Version 221    2019-May-5
 
 --Server now reports death-age in GRAVE_OLD message, and client now displays
   how long person has been dead on grave mouse-over.
@@ -12,6 +12,8 @@ Version 220    ???
 
 --PaperThreshold slider in import editor allows better control of feathering on
   transparent sprite edges.
+
+--New protocol for server to tell client about valley spacing.
 
 
 
@@ -34,6 +36,13 @@ Server Fixes:
   causing them to disconnect.  Fixes #286
 
 --Support for gridPlacement objects that are spread evenly on map (ponds).
+
+--Fixed RIDICULOUS bug in map placement algorithm (that was mis-measuring tall
+  objects to the south that would block placement of short objects, effectively
+  blocking placement of short objects in the two tiles to the north of any
+  object that sticks up above the tile center).  Map is now much fuller than it
+  used to be.
+
 
 
 
