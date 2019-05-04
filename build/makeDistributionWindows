@@ -25,7 +25,7 @@ mv base/* windows
 
 
 cd ../gameSource
-sh makeRegenerateCachesWindows
+sh makeRegenerateCachesWindows || sh makeRegenerateCaches
 
 cd ../build/windows/OneLife_$1
 
