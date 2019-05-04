@@ -44,8 +44,12 @@ cp ../gameSource/OneLife.exe windows/OneLife_$1/
 cp win32/*.dll windows/OneLife_$1/
 
 
-g++ -o unix2dos unix2dos.c 
-cp unix2dos windows
+if which unix2dos; then
+    cp "$(which unix2dos)" windows
+else
+    g++ -o unix2dos unix2dos.c 
+    cp unix2dos windows
+fi
 cp unix2dosScript windows
 
 
