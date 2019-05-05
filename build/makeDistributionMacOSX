@@ -14,6 +14,8 @@ if [ $# -lt 3 ] ; then
 fi
 
 
+mkdir mac
+
 rm -rf mac/OneLife_$1
 
 
