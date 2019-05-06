@@ -59,4 +59,4 @@ rm -f dataVersionNumber.txt
 ln -s ~/checkout/OneLifeData7/dataVersionNumber.txt .
 
 
-git for-each-ref --sort=-creatordate --format '%(refname:short)' --count=1 refs/tags/OneLife_v* | sed -e 's/OneLife_v//' > serverCodeVersionNumber.txt
+git for-each-ref --sort=-creatordate --format '%(refname:short)' --count=1 refs/tags/Crucible_v* | sed -e 's/Crucible_v//' > serverCodeVersionNumber.txt
