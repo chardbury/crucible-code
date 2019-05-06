@@ -12,6 +12,9 @@ leak.out*
 core*
 
 gameSource/OneLife
+gameSource/OneLife.dSYM/
+gameSource/EditOneLife
+gameSource/EditOneLife.dSYM/
 gameSource/testUser/*
 gameSource/testUser2/*
 gameSource/recordedGames/*
