@@ -928,6 +928,48 @@ static void clearCacheFiles() {
 
 
 
+int retagSprite(int inSpriteID, const char *inTag) {
+
+    File spritesDir(NULL, "sprites");   
+
+    if ( !spritesDir.exists() ) {
+        spritesDir.makeDirectory();
+        }
+
+    if ( spritesDir.exists() && spritesDir.isDirectory() ) {
+        
+        const char *printFormatTXT = "%d.txt";
+
+        char *fileNameTXT = autoSprintf( printFormatTXT, inSpriteID );
+
+        clearCacheFiles();
+
+        File *metaFile = spritesDir.getChildFile( fileNameTXT );
+        
+        SpriteRecord *r = getSpriteRecord( inSpriteID );
+
+        r->tag = stringDuplicate( inTag );
+
+        char *metaContents = autoSprintf( "%s %d %d %d", inTag,
+                                          r->multiplicativeBlend,
+                                          r->centerAnchorXOffset,
+                                          r->centerAnchorYOffset );
+        
+        metaFile->writeToFile( metaContents );
+        
+        delete [] metaContents;
+        delete [] fileNameTXT;
+        delete metaFile;
+
+        return inSpriteID;
+
+    }
+    
+    return -1;
+
+}
+
+
 
 int addSprite( const char *inTag, SpriteHandle inSprite,
                Image *inSourceImage,

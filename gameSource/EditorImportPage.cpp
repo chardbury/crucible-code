@@ -187,6 +187,7 @@ EditorImportPage::EditorImportPage()
     mSpriteTrimEditorButton.addActionListener( this );
     mObjectEditorButton.addActionListener( this );
     
+    mSpritePicker.addActionListener( this );
     mOverlayPicker.addActionListener( this );
 
 
@@ -339,7 +340,19 @@ static void addShadow( Image *inImage, Image *inShadow, double inWeight ) {
 
 
 void EditorImportPage::actionPerformed( GUIComponent *inTarget ) {
-    if( inTarget == &mImportButton ||
+
+    if ( inTarget == &mSpritePicker ) {
+        int spriteID = mSpritePicker.getSelectedObject();
+        if (spriteID != -1) {
+            SpriteRecord *pickedSprite = getSpriteRecord(spriteID);
+            mSpriteTagField.setText(pickedSprite->tag);
+            mSaveSpriteButton.setVisible( true );
+            }
+        else {
+            mSaveSpriteButton.setVisible( false );
+            }
+        }
+    else if( inTarget == &mImportButton ||
         inTarget == &mImportLinesButton ||
         inTarget == &mImportOverlayButton ) {
         
@@ -846,45 +859,56 @@ void EditorImportPage::actionPerformed( GUIComponent *inTarget ) {
         }
     else if( inTarget == &mSaveSpriteButton ) {
         char *tag = mSpriteTagField.getText();
-        
+        int spriteID = mSpritePicker.getSelectedObject();
+
         if( strcmp( tag, "" ) != 0 ) {
-            
-            if( mShadowSlider.isVisible() &&
-                mShadowSlider.getValue() > 0 ) {
+
+            if( mProcessedSelectionSprite == NULL && spriteID != -1 ) {
+
+                retagSprite( spriteID, tag );
+
+            }
+
+            else {
                 
-                addShadow( mProcessedSelection, mProcessedShadow,
-                           mShadowSlider.getValue() );
+                if( mShadowSlider.isVisible() &&
+                    mShadowSlider.getValue() > 0 ) {
+                    
+                    addShadow( mProcessedSelection, mProcessedShadow,
+                            mShadowSlider.getValue() );
+                    
+                    freeSprite( mProcessedSelectionSprite );
+                    
+                    mProcessedSelectionSprite = 
+                        fillSprite( mProcessedSelection, false );
+                    }
                 
-                freeSprite( mProcessedSelectionSprite );
+
+
+                int newID = 
+                    addSprite( tag, 
+                            mProcessedSelectionSprite,
+                            mProcessedSelection,
+                            mSelectionMultiplicative,
+                            mProcessedCenterOffset.x,
+                            mProcessedCenterOffset.y );
                 
-                mProcessedSelectionSprite = 
-                    fillSprite( mProcessedSelection, false );
+                spritePickable.usePickable( newID );
+                
+                mSpritePicker.redoSearch( false );
+                
+                // don't let it get freed now
+                mProcessedSelectionSprite = NULL;
+
+                freeSprite( mProcessedShadowSprite );
+                mProcessedShadowSprite = NULL;
+
+                mSaveSpriteButton.setVisible( false );
+                mInvertButton.setVisible( false );
+
+                mShowTagMessage = false;
+
                 }
-            
-
-
-            int newID = 
-                addSprite( tag, 
-                           mProcessedSelectionSprite,
-                           mProcessedSelection,
-                           mSelectionMultiplicative,
-                           mProcessedCenterOffset.x,
-                           mProcessedCenterOffset.y );
-            
-            spritePickable.usePickable( newID );
-            
-            mSpritePicker.redoSearch( false );
-            
-            // don't let it get freed now
-            mProcessedSelectionSprite = NULL;
-
-            freeSprite( mProcessedShadowSprite );
-            mProcessedShadowSprite = NULL;
-
-            mSaveSpriteButton.setVisible( false );
-            mInvertButton.setVisible( false );
-
-            mShowTagMessage = false;
             }
         else {
             mShowTagMessage = true;

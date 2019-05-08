@@ -114,6 +114,12 @@ SpriteRecord **searchSprites( const char *inSearch,
                               int inNumToSkip, 
                               int inNumToGet, 
                               int *outNumResults, int *outNumRemaining );
+                              
+                              
+
+// return ID, or -1 if retag failed
+int retagSprite( int inSpriteID,
+                  const char *inTag );
 
 
 // returns new ID, or -1 if adding failed
