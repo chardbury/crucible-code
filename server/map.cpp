@@ -233,6 +233,9 @@ static double gapIntScale = 1000000.0;
 static int numBiomes;
 static int *biomes;
 
+static double biomeScale = 0.83332;
+static double biomeOffset = 0.08333;
+
 // one vector per biome
 static SimpleVector<int> *naturalMapIDs;
 static SimpleVector<float> *naturalMapChances;
@@ -783,7 +786,7 @@ static int computeMapBiomeIndex( int inX, int inY,
         double randVal = getXYFractal(  inX,
                                         inY,
                                         0.55, 
-                                        0.83332 + 0.08333 * numBiomes );
+                                        biomeScale + biomeOffset * numBiomes );
         
         if( randVal > maxValue ) {
             // a new first place
@@ -3168,6 +3171,17 @@ char initMap() {
         }
     
     delete [] allObjects;
+
+    AppLog::infoF( "Reading biome scale information " );
+    FILE *scaleFile = fopen( "settings/biomeScale.txt", "r" );
+    if( scaleFile != NULL ) {
+        int numRead = fscanf( scaleFile, "%d %d", &biomeScale, &biomeOffset );
+            if( numRead != 2 ) {
+                AppLog::infoF( "Problem reading biome scale information, using defaults");
+            }
+        } else {
+            AppLog::infoF( "Problem reading biome scale information, using defaults");
+        }
 
     
     skipRemovedObjectCleanup = 
