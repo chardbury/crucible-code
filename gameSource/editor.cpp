@@ -186,12 +186,12 @@ char isNonIntegerScalingAllowed() {
 
 
 const char *getWindowTitle() {
-    return "EDITOR - OneLife";
+    return "EDITOR - Crucible";
     }
 
 
 const char *getAppName() {
-    return "EditOneLife";
+    return "EditCrucible";
     }
 
 
@@ -202,7 +202,7 @@ int getAppVersion() {
 
 const char *getLinuxAppName() {
     // no dir-name conflict here because we're using all caps for app name
-    return "EditOneLifeApp";
+    return "EditCrucibleApp";
     }
 
 

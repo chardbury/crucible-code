@@ -11,16 +11,16 @@ callgrind.out*
 leak.out*
 core*
 
-gameSource/OneLife
-gameSource/OneLife.dSYM/
-gameSource/EditOneLife
-gameSource/EditOneLife.dSYM/
+gameSource/Crucible
+gameSource/Crucible.dSYM/
+gameSource/EditCrucible
+gameSource/EditCrucible.dSYM/
 gameSource/testUser/*
 gameSource/testUser2/*
 gameSource/recordedGames/*
 gameSource/screenShots/*
 
-server/OneLifeServer
+server/CrucibleServer
 server/log.txt
 server/recentPlacements.txt
 server/*.db

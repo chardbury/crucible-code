@@ -5,15 +5,15 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.onehouronelife</string>
+	<string>life.oho.crucible</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>OneLife</string>
+	<string>Crucible</string>
 	<key>CFBundleIconFile</key>
-	<string>OneLife.icns</string>
+	<string>Crucible.icns</string>
 	<key>CFBundleName</key>
-	<string>OneLife</string>
+	<string>Crucible</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
@@ -23,7 +23,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>0</string>
 	<key>CFBundleGetInfoString</key>
-	<string>OneLife</string>
+	<string>Crucible</string>
 	<key>CFBundleLongVersionString</key>
 	<string>0</string>
 	<key>NSHumanReadableCopyright</key>

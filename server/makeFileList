@@ -10,7 +10,7 @@ LINK_AGAINST_LIBPNG = no
 
 LINK_HEADLESS = yes
 
-APP_NAME = OneLifeServer
+APP_NAME = CrucibleServer
 ROOT_PATH = ../..
 
 

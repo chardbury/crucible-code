@@ -7,9 +7,9 @@ fi
 
 
 
-sourceBundleDir="OneLife_$1_UnixSource"
+sourceBundleDir="Crucible_$1_UnixSource"
 
-sourceWorkingDir="OneLife_$1_UnixSource_build"
+sourceWorkingDir="Crucible_$1_UnixSource_build"
 
 rm -rf $sourceWorkingDir
 
@@ -25,8 +25,8 @@ sh makeRegenerateCaches
 cd ../../..
 
 
-buildDir="OneLife_$1"
-finalTarball="OneLife_$1_Linux.tar.gz"
+buildDir="Crucible_$1"
+finalTarball="Crucible_$1_Linux.tar.gz"
 
 rm -rf $buildDir $buildDir_Linux.tar.gz
 
@@ -35,7 +35,7 @@ mkdir $buildDir
 
 cd $sourceWorkingDir
 cp -r animations music objects sounds sprites categories transitions ground dataVersionNumber.txt ../$buildDir
-cp -r OneLifeApp graphics otherSounds languages language.txt no_copyright.txt Readme.txt settings reverbImpulseResponse.aiff wordList.txt reverbCache groundTileCache us_english_60.txt ../$buildDir
+cp -r CrucibleApp graphics otherSounds languages language.txt no_copyright.txt Readme.txt settings reverbImpulseResponse.aiff wordList.txt reverbCache groundTileCache us_english_60.txt ../$buildDir
 
 cd ../$buildDir
 

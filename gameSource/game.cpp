@@ -250,12 +250,12 @@ char isNonIntegerScalingAllowed() {
 
 
 const char *getWindowTitle() {
-    return "OneLife";
+    return "Crucible";
     }
 
 
 const char *getAppName() {
-    return "OneLife";
+    return "Crucible";
     }
 
 int getAppVersion() {
@@ -264,7 +264,7 @@ int getAppVersion() {
 
 const char *getLinuxAppName() {
     // no dir-name conflict here because we're using all caps for app name
-    return "OneLifeApp";
+    return "CrucibleApp";
     }
 
 
@@ -452,7 +452,7 @@ void initFrameDrawer( int inWidth, int inHeight, int inTargetFrameRate,
 
 
     AppLog::printOutNextMessage();
-    AppLog::infoF( "OneLife client v%d (binV=%d, dataV=%d) starting up",
+    AppLog::infoF( "Crucible client v%d (binV=%d, dataV=%d) starting up",
                    versionNumber, binVersionNumber, dataVersionNumber );
 
 
