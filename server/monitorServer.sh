@@ -1,4 +1,4 @@
-serverPID=`pidof OneLifeServer`
+serverPID=`pidof CrucibleServer`
 
 echo "Server PID = $serverPID"
 

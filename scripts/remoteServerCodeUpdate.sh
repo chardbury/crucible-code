@@ -2,7 +2,7 @@ echo ""
 echo "Shutting down server"
 echo ""
 
-serverPID=`pgrep OneLifeServer`
+serverPID=`pgrep CrucibleServer`
 
 if [ -z $serverPID ]
 then
